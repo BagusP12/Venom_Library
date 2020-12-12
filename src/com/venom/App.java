@@ -23,7 +23,7 @@ public class App {
 
             switch(userInput) {
                 case 1:
-                bookList();
+                //Do Something
                 break;
                 
                 case 2:
@@ -48,10 +48,6 @@ public class App {
             isContinue = continuePrompt();
         }
 
-    }
-
-    private static void bookList() {
-        String query = "SELECT * FROM books";
     }
 
     private static boolean continuePrompt() {
