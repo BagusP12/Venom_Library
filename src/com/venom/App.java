@@ -72,7 +72,7 @@ public class App {
                 default:
                     System.err.println("Wrong input (1-5) : ");
             }
-            isContinue = prompt("Do you want to continue? (y/n) : ");
+            isContinue = prompt("Return to main menu? (y/n) : ");
         }
     }
 
@@ -86,6 +86,7 @@ public class App {
 
             System.out.println("===== Book List =====");
             System.out.println(" NO. | TITLE                                              | AUTHOR               | GENRE      | DATE       | PUBLISHER ");
+            System.out.println("-----------------------------------------------------------------------------------------------------------------------");
             while (rs.next()) {
                 Book book = new Book(rs.getInt("id"), rs.getString("title"), rs.getString("author"), rs.getString("genre"), rs.getDate("publishing_date"), rs.getString("publisher"));
                 System.out.println(String.format("%3d. | %-50s | %-20s | %-10s | %s | %s", book.getId(), book.getTitle(), book.getAuthor(), book.getGenre(), book.getPublishingDate(), book.getPublisher()));
