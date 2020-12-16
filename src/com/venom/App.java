@@ -78,7 +78,7 @@ public class App {
                     break;
 
                 case 5:
-                    //Do Something
+                    deleteBook();
                     break;
 
                 default:
@@ -89,6 +89,8 @@ public class App {
     }
 
     private static void bookList() {
+        clearTerminal();
+
         String sqlQuery = "SELECT * FROM books";
 
         try {
@@ -109,7 +111,7 @@ public class App {
                 */
 
                 Book book = new Book(rs.getInt("id"), rs.getString("title"), rs.getString("author"), rs.getString("genre"), rs.getDate("publishing_date"), rs.getString("publisher"));
-                System.out.println(String.format("%d. | %-50s | %-20s | %-10s | %s | %s", book.getId(), book.getTitle(), book.getAuthor(), book.getGenre(), book.getPublishingDate(), book.getPublisher()));
+                System.out.println(String.format("%3d. | %-50s | %-20s | %-10s | %s | %s", book.getId(), book.getTitle(), book.getAuthor(), book.getGenre(), book.getPublishingDate(), book.getPublisher()));
             }
 
         } catch (Exception e) {
@@ -118,30 +120,40 @@ public class App {
     }
 
     private static void addBook() {
+        clearTerminal();
+
         Scanner scanner = new Scanner (System.in);
+
         boolean isInsertingData = true;
         boolean isDataCorrect = false;
 
+        String title = "";
+        String author = "";
+        String genre = "";
+        String publishingDate = "";
+        String publisher = "";
+
+        String sqlQuery = "INSERT INTO books (title, author, genre, publishing_date, publisher) VALUE ('%s', '%s', '%s', '%s', '%s')";
+
         while (isInsertingData) {
-            clearTerminal();
             try {
                 while (!isDataCorrect) {
                     System.out.println("===== Add Book =====");
                     System.out.print("Title\t\t: ");
-                    String title = scanner.nextLine().trim();
+                    title = scanner.nextLine().trim();
 
                     System.out.print("Author\t\t: ");
-                    String author = scanner.nextLine().trim();
+                    author = scanner.nextLine().trim();
 
                     System.out.print("Genre\t\t: ");
-                    String genre = scanner.nextLine().trim();
+                    genre = scanner.nextLine().trim();
 
                     System.out.println("Publising Date\t: ");
-                    System.out.print("(YYYY-MM-DD)\t:");
-                    String publishingDate = scanner.nextLine().trim();
+                    System.out.print("(YYYY-MM-DD)\t: ");
+                    publishingDate = scanner.nextLine().trim();
 
                     System.out.print("Publisher\t: ");
-                    String publisher = scanner.nextLine().trim();
+                    publisher = scanner.nextLine().trim();
 
                     System.out.println("==================");
 
@@ -152,16 +164,36 @@ public class App {
                     System.out.println("Publisher\t: " + publisher);
 
                     isDataCorrect = prompt("Is the data you inserted correct? (y/n) : ");
-
-                    String sqlQuery = "INSERT INTO books (title, author, genre, publishing_date, publisher) VALUE ('%s', '%s', '%s', '%s', '%s')";
-                    sqlQuery = String.format(sqlQuery, title, author, genre, publishingDate, publisher);
-
-                    stmt.execute(sqlQuery);
                 }
+                System.out.println("Data inserted...");
+                sqlQuery = String.format(sqlQuery, title, author, genre, publishingDate, publisher);
+                stmt.execute(sqlQuery);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             isInsertingData = prompt("Do you want to add a new data again? (y/n) : ");
+        }
+    }
+
+    private static void deleteBook() {
+        bookList();
+
+        Scanner scanner = new Scanner (System.in);
+        boolean isIdCorrect = false;
+        String sqlQuery = "DELETE FROM books WHERE id = %d";
+        int id = 0;
+
+        try {
+            while (!isIdCorrect) {
+                System.out.print("Select which ID wants to be deleted : ");
+                id = scanner.nextInt();
+                isIdCorrect = prompt("Are you sure to delete book id " + id + "? (y/n) : ");
+            }
+            System.out.println("Book deleted...");
+            sqlQuery = String.format(sqlQuery, id);
+            stmt.execute(sqlQuery);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
