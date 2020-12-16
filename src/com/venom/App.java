@@ -74,7 +74,7 @@ public class App {
                     break;
 
                 case 4:
-                    //Do Something
+                    updateBook();
                     break;
 
                 case 5:
@@ -97,6 +97,7 @@ public class App {
             rs = stmt.executeQuery(sqlQuery);
 
             System.out.println("===== Book List =====");
+            System.out.println(" NO.  | TITLE                                              | AUTHOR               | GENRE      | DATE       | PUBLISHER ");
             while (rs.next()) {
 
                 /*
@@ -163,7 +164,7 @@ public class App {
                     System.out.println("Publising Date\t: " + publishingDate);
                     System.out.println("Publisher\t: " + publisher);
 
-                    isDataCorrect = prompt("Is the data you inserted correct? (y/n) : ");
+                    isDataCorrect = prompt("Is the data you inserted is correct? (y/n) : ");
                 }
                 System.out.println("Data inserted...");
                 sqlQuery = String.format(sqlQuery, title, author, genre, publishingDate, publisher);
@@ -171,7 +172,62 @@ public class App {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            isInsertingData = prompt("Do you want to add a new data again? (y/n) : ");
+            isInsertingData = prompt("Do you want to add another data? (y/n) : ");
+        }
+    }
+
+    private static void updateBook() {
+        bookList();
+        
+        Scanner scanner = new Scanner (System.in);
+
+        boolean isUpdatingData = true;
+        boolean isDataCorrect = false;
+
+        int id = 0;
+        String title = "";
+        String author = "";
+        String genre = "";
+        String publishingDate = "";
+        String publisher = "";
+
+        String sqlQuery = "UPDATE books SET title='%s', author='%s', genre='%s', publishing_date='%s', publisher='%s' WHERE id=%d";
+
+        while (isUpdatingData) {
+            try {
+                while (!isDataCorrect) {
+
+                    System.out.println("===== Update Book =====");
+                    System.out.print("Select which book id you want to update : ");
+                    id = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.println("==================");
+
+                    System.out.print("Title\t\t: ");
+                    title = scanner.nextLine().trim();
+
+                    System.out.print("Author\t\t: ");
+                    author = scanner.nextLine().trim();
+
+                    System.out.print("Genre\t\t: ");
+                    genre = scanner.nextLine().trim();
+
+                    System.out.println("Publising Date\t: ");
+                    System.out.print("(YYYY-MM-DD)\t: ");
+                    publishingDate = scanner.nextLine().trim();
+
+                    System.out.print("Publisher\t: ");
+                    publisher = scanner.nextLine().trim();
+                        
+                    isDataCorrect = prompt("Is the data you updated is correct? (y/n) : ");
+                }
+                System.out.println("Data updated...");
+                sqlQuery = String.format(sqlQuery, title, author, genre, publishingDate, publisher, id);
+                stmt.execute(sqlQuery);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            isUpdatingData = prompt("Do you want to update another data? (y/n) : ");
         }
     }
 
