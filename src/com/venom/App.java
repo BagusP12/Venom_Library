@@ -1,13 +1,10 @@
 package com.venom;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.Statement;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Scanner;
 
 public class App {
@@ -52,10 +49,9 @@ public class App {
 
             System.out.println("===== Venom Library Book Database =====");
             System.out.println("1. \tBook List");
-            System.out.println("2. \tSearch Book");
-            System.out.println("3. \tAdd Book");
-            System.out.println("4. \tUpdate Book");
-            System.out.println("5. \tDelete Book");
+            System.out.println("2. \tAdd Book");
+            System.out.println("3. \tUpdate Book");
+            System.out.println("4. \tDelete Book");
 
             System.out.print("Select menu : ");
             byte userInput = scanner.nextByte();
@@ -64,23 +60,15 @@ public class App {
                 case 1:
                     bookList();
                     break;
-                
                 case 2:
-                    //Do Something
-                    break;
-
-                case 3:
                     addBook();
                     break;
-
-                case 4:
+                case 3:
                     updateBook();
                     break;
-
-                case 5:
+                case 4:
                     deleteBook();
                     break;
-
                 default:
                     System.err.println("Wrong input (1-5) : ");
             }
@@ -97,20 +85,8 @@ public class App {
             rs = stmt.executeQuery(sqlQuery);
 
             System.out.println("===== Book List =====");
-            System.out.println(" NO.  | TITLE                                              | AUTHOR               | GENRE      | DATE       | PUBLISHER ");
+            System.out.println(" NO. | TITLE                                              | AUTHOR               | GENRE      | DATE       | PUBLISHER ");
             while (rs.next()) {
-
-                /*
-                int id = rs.getInt("id");
-                String title = rs.getString("title");
-                String author = rs.getString("author");
-                String genre = rs.getString("genre");
-                Date publishing_date = rs.getDate("publishing_date");
-                String publisher = rs.getString("publisher");
-                
-                System.out.println(String.format("%d. | %-50s | %-20s | %-10s | %s | %s", id, title, author, genre, publishing_date, publisher));
-                */
-
                 Book book = new Book(rs.getInt("id"), rs.getString("title"), rs.getString("author"), rs.getString("genre"), rs.getDate("publishing_date"), rs.getString("publisher"));
                 System.out.println(String.format("%3d. | %-50s | %-20s | %-10s | %s | %s", book.getId(), book.getTitle(), book.getAuthor(), book.getGenre(), book.getPublishingDate(), book.getPublisher()));
             }
